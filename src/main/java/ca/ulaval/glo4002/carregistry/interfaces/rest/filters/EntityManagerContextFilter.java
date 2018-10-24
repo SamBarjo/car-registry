@@ -1,4 +1,5 @@
-package ca.ulaval.glo4002.carregistry.rest.filters;
+package ca.ulaval.glo4002.carregistry.interfaces.rest.filters;
+
 import java.io.IOException;
 
 import javax.persistence.EntityManager;
@@ -24,7 +25,6 @@ public class EntityManagerContextFilter implements Filter {
  
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
- 
         EntityManager entityManager = null;
  
         try {

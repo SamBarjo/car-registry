@@ -17,52 +17,52 @@ import ca.ulaval.glo4002.carregistry.domain.CarRegistry;
 import ca.ulaval.glo4002.carregistry.infrastructure.persistence.EntityManagerFactoryProvider;
 import ca.ulaval.glo4002.carregistry.infrastructure.persistence.EntityManagerProvider;
 import ca.ulaval.glo4002.carregistry.infrastructure.persistence.HibernateCarRegistry;
-import ca.ulaval.glo4002.carregistry.rest.filters.EntityManagerContextFilter;
+import ca.ulaval.glo4002.carregistry.interfaces.rest.filters.EntityManagerContextFilter;
 
 public class CarRegistryServer {
-	public static void main(String[] args) {
-		new CarRegistryServer().run();
-	}
+    public static void main(String[] args) {
+        new CarRegistryServer().run();
+    }
 
-	public void run() {
-		prefillDatabase();
-		startServer();
-	}
+    public void run() {
+        prefillDatabase();
+        startServer();
+    }
 
-	private void prefillDatabase() {
-		EntityManagerFactory entityManagerFactory = EntityManagerFactoryProvider.getFactory();
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		EntityManagerProvider.setEntityManager(entityManager);
+    private void prefillDatabase() {
+        EntityManagerFactory entityManagerFactory = EntityManagerFactoryProvider.getFactory();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityManagerProvider.setEntityManager(entityManager);
 
-		CarRegistry carRegistry = new HibernateCarRegistry();
-		carRegistry.insert(new CarOwner("John Doe"));
-		carRegistry.insert(new CarOwner("Jane Doe"));
+        CarRegistry carRegistry = new HibernateCarRegistry();
+        carRegistry.insert(new CarOwner("John Doe"));
+        carRegistry.insert(new CarOwner("Jane Doe"));
 
-		EntityManagerProvider.clearEntityManager();
-		entityManager.close();
-	}
+        EntityManagerProvider.clearEntityManager();
+        entityManager.close();
+    }
 
-	private void startServer() {
-		int httpPort = 9595;
+    private void startServer() {
+        int httpPort = 9595;
 
-		Server server = new Server(httpPort);
-		ServletContextHandler servletContextHandler = new ServletContextHandler(server, "/");
-		servletContextHandler.addFilter(EntityManagerContextFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
-		configurerJersey(servletContextHandler);
-		try {
-			server.start();
-			server.join();
-		} catch (Exception e) {
-			e.printStackTrace(); // Une des rare fois qu'on peut!
-		} finally {
-			server.destroy();
-		}
-	}
+        Server server = new Server(httpPort);
+        ServletContextHandler servletContextHandler = new ServletContextHandler(server, "/");
+        servletContextHandler.addFilter(EntityManagerContextFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
+        configurerJersey(servletContextHandler);
+        try {
+            server.start();
+            server.join();
+        } catch (Exception e) {
+            e.printStackTrace(); // Une des rare fois qu'on peut!
+        } finally {
+            server.destroy();
+        }
+    }
 
-	private void configurerJersey(ServletContextHandler servletContextHandler) {
-		ServletContainer container = new ServletContainer(
-				new ResourceConfig().packages("ca.ulaval.glo4002.carregistry.interfaces.rest"));
-		ServletHolder jerseyServletHolder = new ServletHolder(container);
-		servletContextHandler.addServlet(jerseyServletHolder, "/*");
-	}
+    private void configurerJersey(ServletContextHandler servletContextHandler) {
+        ServletContainer container = new ServletContainer(
+                new ResourceConfig().packages("ca.ulaval.glo4002.carregistry.interfaces.rest"));
+        ServletHolder jerseyServletHolder = new ServletHolder(container);
+        servletContextHandler.addServlet(jerseyServletHolder, "/*");
+    }
 }
