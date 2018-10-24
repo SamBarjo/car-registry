@@ -7,7 +7,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-        <jersey.version>2.26</jersey.version>
+        <jersey.version>2.27</jersey.version>
         <maven-exec-plugin.version>1.6.0</maven-exec-plugin.version>
         <maven-compiler-plugin.veresion>3.6.1</maven-compiler-plugin.veresion>
     </properties>
