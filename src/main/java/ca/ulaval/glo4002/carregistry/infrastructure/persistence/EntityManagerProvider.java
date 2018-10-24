@@ -6,7 +6,7 @@ public class EntityManagerProvider {
  
     private static ThreadLocal<EntityManager> localEntityManager = new ThreadLocal<>();
  
-    public EntityManager getEntityManager() {
+    public static EntityManager getEntityManager() {
         return localEntityManager.get();
     }
  
